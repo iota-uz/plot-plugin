@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "plot": {
+      "type": "http",
+      "url": "https://canvas.iota.uz/mcp",
+      "headers": {
+        "Authorization": "Bearer ${PLOT_MCP_TOKEN}"
+      }
+    }
+  }
+}

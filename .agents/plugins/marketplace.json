@@ -1,0 +1,20 @@
+{
+  "name": "iota-uz",
+  "interface": {
+    "displayName": "iota.uz"
+  },
+  "plugins": [
+    {
+      "name": "plot",
+      "source": {
+        "source": "local",
+        "path": "./plugins/plot"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

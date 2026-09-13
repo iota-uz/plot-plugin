@@ -1,0 +1,19 @@
+{
+  "name": "iota-uz",
+  "owner": {
+    "name": "iota-uz",
+    "url": "https://github.com/iota-uz"
+  },
+  "metadata": {
+    "description": "Official Plot plugin for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "plot",
+      "source": "./plugins/plot",
+      "description": "Create and refine interfaces, diagrams, reports, videos, and character scenes in Plot.",
+      "category": "productivity",
+      "tags": ["plot", "design", "canvas", "video", "character", "mcp"]
+    }
+  ]
+}

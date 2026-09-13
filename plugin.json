@@ -1,0 +1,14 @@
+{
+  "name": "plot",
+  "version": "0.1.0",
+  "description": "Create and refine interfaces, diagrams, reports, videos, and character scenes in Plot.",
+  "author": {
+    "name": "iota.uz",
+    "url": "https://iota.uz"
+  },
+  "homepage": "https://canvas.iota.uz",
+  "repository": "https://github.com/iota-uz/plot-plugin",
+  "license": "Apache-2.0",
+  "skills": "./plugins/plot/skills/",
+  "mcpServers": "./plugins/plot/.mcp.json"
+}

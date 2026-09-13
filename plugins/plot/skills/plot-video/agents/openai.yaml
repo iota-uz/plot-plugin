@@ -1,0 +1,13 @@
+interface:
+  display_name: "Plot Video"
+  short_description: "Produce videos and character scenes in Plot"
+  default_prompt: "Use $plot-video to produce and review a short video in Plot."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "plot"
+      description: "Remote Plot video, character, asset, and render tools"
+      transport: "streamable_http"
+      url: "https://canvas.iota.uz/mcp"
+policy:
+  allow_implicit_invocation: true

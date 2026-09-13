@@ -1,0 +1,13 @@
+interface:
+  display_name: "Plot Canvas"
+  short_description: "Design and refine visual work in Plot"
+  default_prompt: "Use $plot-canvas to design and inspect a production-ready interface in Plot."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "plot"
+      description: "Remote Plot canvas, asset, and authoring tools"
+      transport: "streamable_http"
+      url: "https://canvas.iota.uz/mcp"
+policy:
+  allow_implicit_invocation: true
