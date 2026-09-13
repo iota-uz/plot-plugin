@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "mcpServer": "plot",
+  "endpoint": "https://canvas.iota.uz/mcp",
+  "skills": ["plot-canvas", "plot-video"],
+  "requiredTools": [
+    "asset_attach",
+    "asset_get",
+    "canvas_snapshot",
+    "execute",
+    "resource_find",
+    "resource_get"
+  ]
+}

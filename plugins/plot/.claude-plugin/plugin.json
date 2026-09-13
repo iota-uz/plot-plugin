@@ -1,7 +1,7 @@
 {
   "name": "plot",
   "displayName": "Plot",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create and refine interfaces, diagrams, reports, videos, and character scenes in Plot through its remote MCP server.",
   "author": {
     "name": "iota.uz",

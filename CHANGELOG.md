@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1 - 2026-09-14
+
+- Add a machine-readable compatibility contract for cross-repository validation.
+
 ## 0.1.0 - 2026-09-14
 
 - Add shared `plot-canvas` and `plot-video` behavioral skills.
