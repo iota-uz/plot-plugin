@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4 - 2026-09-14
+
+- Plan the role of imagery and sound, compare existing assets visually, and distinguish relevance labels from verified provenance.
+- Review individual screens at legible size and refine observed design issues without mandatory interactivity.
+- Add model-independent, nonblocking PreToolUse/PostToolUse reminders. No network, model calls, transcript inspection, argument rewriting or Stop gates; Codex hook trust remains user-controlled.
+
 ## 0.1.3 - 2026-09-14
 
 - Prioritize visual design and maintainable HTML; production interactions are scoped to the user's request.

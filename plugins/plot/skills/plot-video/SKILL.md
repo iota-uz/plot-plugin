@@ -17,6 +17,8 @@ Own the complete timed-media result: story, image, motion, character continuity,
 
 Search both workspace and shared libraries before generating or importing media. Inspect metadata and previews, choose an appropriate immutable revision, and reuse approved logos, character assets, backgrounds, product imagery, clips, music, ambience, and sound effects when available.
 
+Choose the role of each visual and sound layer before filling the timeline: what should the audience understand, feel or notice? Search by subject, mood and production role; compare a small set visually and listen to audio candidates for pacing, tone, usable duration and speech compatibility. Library tags describe candidates; they do not independently verify approval, origin or usage rights. When no suitable asset exists, broaden the query, import/generate with the required approval, or deliberately use silence or a simpler composition. Keep invented demo material distinct from supplied facts.
+
 Never generate or approximate a replacement for an available official mark. Do not claim an invented mark is official when the correct asset is absent. Check the actual content, revision, format, rights, and production role rather than trusting a filename.
 
 ## Work through an observable loop

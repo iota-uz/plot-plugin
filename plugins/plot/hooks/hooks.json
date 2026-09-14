@@ -1,0 +1,6 @@
+{
+  "hooks": {
+    "PreToolUse": [{ "matcher": "mcp__.*plot.*__.*", "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/design-context.mjs\"", "timeout": 5 }] }],
+    "PostToolUse": [{ "matcher": "mcp__.*plot.*__.*", "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/design-context.mjs\"", "timeout": 5 }] }]
+  }
+}
