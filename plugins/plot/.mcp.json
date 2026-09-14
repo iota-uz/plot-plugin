@@ -3,6 +3,7 @@
     "plot": {
       "type": "http",
       "url": "https://canvas.iota.uz/mcp",
+      "headersHelper": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/mcp-headers.mjs\"",
       "headers": {
         "Authorization": "Bearer ${PLOT_MCP_TOKEN}"
       }

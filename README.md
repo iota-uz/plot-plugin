@@ -28,7 +28,7 @@ claude plugin marketplace add iota-uz/plot-plugin
 claude plugin install plot@iota-uz
 ```
 
-The bundled `.mcp.json` connects to `https://canvas.iota.uz/mcp` and reads `PLOT_MCP_TOKEN` from the environment. Start a new Claude Code session after installation or update.
+The bundled `.mcp.json` connects to `https://canvas.iota.uz/mcp`, reads `PLOT_MCP_TOKEN` from the environment, and gives each connection an implicit session header for safe read-before-write behavior. Start a new Claude Code session after installation or update.
 
 ## Codex CLI and Desktop
 
