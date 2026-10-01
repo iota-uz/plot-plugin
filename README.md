@@ -7,7 +7,12 @@ The plugin contains two behavioral skills:
 - `plot-canvas` for screens, documents, diagrams, reports, prototypes, and spatial canvases.
 - `plot-video` for timed media, sound, renders, and character performances.
 
-The skills teach an asset-first, evidence-driven workflow. They do not bundle the private Plot backend, credentials, or a static copy of the MCP tool catalog.
+The skills teach how to approach the work: read the canvas first, build React screens on a shared component library, edit on the server without local copies, and verify the result with snapshots. The server instructions and tool schemas stay the source of truth for tool names and arguments; the plugin does not bundle the private Plot backend, credentials, or a copy of the tool catalog.
+
+Claude Code also gets:
+
+- `plot:plot-canvas-worker`, a subagent for one parallel slice of canvas work. It preloads `plot-canvas`, cannot write local files, and expects the canvas ref, its own file paths and the library digest in its prompt. Codex has no plugin agents; the brief template in `plot-canvas` serves there.
+- Advisory hooks that start a process only after Plot writes and snapshots, plus a short reminder after a conversation is compacted (tool schemas must be reloaded).
 
 ## Authentication
 
@@ -50,7 +55,10 @@ python3 /path/to/plugin-creator/scripts/validate_plugin.py plugins/plot
 python3 /path/to/skill-creator/scripts/quick_validate.py plugins/plot/skills/plot-canvas
 python3 /path/to/skill-creator/scripts/quick_validate.py plugins/plot/skills/plot-video
 claude plugin validate --strict .
+node --test plugins/plot/scripts/*.test.mjs
 ```
+
+The tests cover the hooks and a contract check: every tool the skills and the agent name is listed in `plugins/plot/contract.json` (`requiredTools`, verified against the live server by the Plot repository), and no skill carries wording the server forbids.
 
 The first public release targets Claude Code and Codex CLI/Desktop. A registered ChatGPT Work app is a later phase.
 
