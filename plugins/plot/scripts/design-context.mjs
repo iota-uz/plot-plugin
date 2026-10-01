@@ -22,7 +22,7 @@ try {
   let known = false;
   try {
     const state = JSON.parse(await readFile(filename, "utf8"));
-    if (state.expires > Date.now() && Array.isArray(state.seen)) { seen = state.seen.slice(0, 4); known = true; }
+    if (state.expires > Date.now() && Array.isArray(state.seen)) { seen = state.seen.slice(0, 8); known = true; }
   } catch {}
   if (event.hook_event_name === "SessionStart") {
     // Only a session that has already used Plot gets the compaction reminder.

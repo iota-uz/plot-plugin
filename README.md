@@ -7,12 +7,12 @@ The plugin contains two behavioral skills:
 - `plot-canvas` for screens, documents, diagrams, reports, prototypes, and spatial canvases.
 - `plot-video` for timed media, sound, renders, and character performances.
 
-The skills teach how to approach the work: read the canvas first, build React screens on a shared component library, edit on the server without local copies, and verify the result with snapshots. The server instructions and tool schemas stay the source of truth for tool names and arguments; the plugin does not bundle the private Plot backend, credentials, or a copy of the tool catalog.
+The skills teach how to approach the work: read the canvas first, build React screens on a shared component library, edit on the server without local copies, and verify the result with snapshots. The server instructions and tool schemas stay the source of truth for tool names and arguments; the plugin does not bundle the private Plot backend, credentials, or a copy of the tool catalog. This release (0.2.0) matches the Plot tool contract of 2026-10-01 (`plot://tools` lists its changes); `contract.json` records the version and the tools the skills name.
 
 Claude Code also gets:
 
-- `plot:plot-canvas-worker`, a subagent for one parallel slice of canvas work. It preloads `plot-canvas`, has no Bash or file-writing tools, and expects the canvas ref, its own file paths and the library digest in its prompt. Codex has no plugin agents; the brief template in `plot-canvas` serves there.
-- Advisory hooks that start a process only after Plot writes and snapshots, plus a short reminder after a conversation is compacted (tool schemas must be reloaded).
+- `plot:plot-canvas-worker`, a subagent for one parallel slice of canvas work. It preloads `plot-canvas`, has no Bash or file-writing tools, and expects the canvas ref, its own file paths and the library digest in its prompt. Codex has no plugin agents; the brief in `plot-canvas` plus `references/worker-rules.md` serve there.
+- Advisory hooks that start a process only after Plot writes and snapshots (they point at `inspect`, `fit_pending` and `tiles.next`), plus a reminder after a conversation is compacted: Claude Code drops the tool schemas, and the server instructions (cut at 2048 characters) show the common signatures but not every call shape, so the reminder adds the rest.
 
 ## Authentication
 
@@ -58,7 +58,7 @@ claude plugin validate --strict .
 node --test plugins/plot/scripts/*.test.mjs
 ```
 
-The tests cover the hooks and a contract check: every tool the skills and the agent name is listed in `plugins/plot/contract.json` (`requiredTools`, verified against the live server by the Plot repository), and no skill carries wording the server forbids.
+The tests cover the hooks and a contract check: every tool the skills, the worker agent and `references/worker-rules.md` name is listed in `plugins/plot/contract.json` (`requiredTools`, verified against the server by the Plot repository), the two copies of the worker rules are identical, `plot-canvas` stays within 8000 characters, and no skill carries wording the server forbids. In the Plot repository, `PLOT_PLUGIN_DIR=<this checkout> NODE_ENV=test npx vitest run test/plugin-contract.test.ts` (in `apps/mcp`) checks the tool names against the server's tool list.
 
 The first public release targets Claude Code and Codex CLI/Desktop. A registered ChatGPT Work app is a later phase.
 

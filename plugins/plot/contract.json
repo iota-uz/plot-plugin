@@ -2,7 +2,10 @@
   "schemaVersion": 1,
   "mcpServer": "plot",
   "endpoint": "https://canvas.iota.uz/mcp",
-  "skills": ["plot-canvas", "plot-video"],
+  "skills": [
+    "plot-canvas",
+    "plot-video"
+  ],
   "requiredTools": [
     "asset_get",
     "asset_import",
@@ -13,14 +16,17 @@
     "canvas_get",
     "canvas_patch",
     "canvas_save",
+    "canvas_save_receipt",
     "canvas_shell",
     "canvas_snapshot",
     "comment_complete",
     "comment_list",
     "execute",
     "library_get",
+    "library_publish",
     "resource_find",
     "resource_get",
     "screen_tree"
-  ]
+  ],
+  "contractVersion": "2026-10-01"
 }
