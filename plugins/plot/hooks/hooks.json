@@ -1,6 +1,6 @@
 {
   "hooks": {
-    "PreToolUse": [{ "matcher": "mcp__.*plot.*__.*", "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/design-context.mjs\"", "timeout": 5 }] }],
-    "PostToolUse": [{ "matcher": "mcp__.*plot.*__.*", "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/design-context.mjs\"", "timeout": 5 }] }]
+    "PostToolUse": [{ "matcher": "^mcp__(?:plot|plugin_plot_plot|.*[ _-]plot)__(?:canvas_save|canvas_edit|canvas_apply_patch|canvas_patch|canvas_nodes_move|canvas_nodes_delete|execute|canvas_snapshot)$", "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/design-context.mjs\"", "timeout": 5 }] }],
+    "SessionStart": [{ "matcher": "compact", "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/design-context.mjs\"", "timeout": 5 }] }]
   }
 }
