@@ -4,11 +4,23 @@
   "endpoint": "https://canvas.iota.uz/mcp",
   "skills": ["plot-canvas", "plot-video"],
   "requiredTools": [
-    "asset_attach",
     "asset_get",
+    "asset_import",
+    "asset_list",
+    "canvas_checkpoint",
+    "canvas_edit",
+    "canvas_file_get",
+    "canvas_get",
+    "canvas_patch",
+    "canvas_save",
+    "canvas_shell",
     "canvas_snapshot",
+    "comment_complete",
+    "comment_list",
     "execute",
+    "library_get",
     "resource_find",
-    "resource_get"
+    "resource_get",
+    "screen_tree"
   ]
 }
