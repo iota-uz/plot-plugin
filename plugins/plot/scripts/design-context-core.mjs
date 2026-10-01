@@ -3,19 +3,19 @@
 // Plot tools after which advice is useful: writes and snapshots. hooks/hooks.json
 // carries the same list in its matcher; design-context.test.mjs keeps them equal.
 // Response fields read (contract 2026-10-01): visual_issues, suggested_previews,
-// inspect (writes), fitted and fit_pending (writes; execute carries them in
-// canvas_commit), tiles.next (canvas_snapshot, top level and in captures[]).
+// inspect and fit_pending (writes; execute carries them in canvas_commit),
+// tiles.next (canvas_snapshot, top level and in captures[]).
 export const ADVISED_TOOLS = ["canvas_save", "canvas_edit", "canvas_apply_patch", "canvas_patch", "canvas_nodes_move", "canvas_nodes_delete", "execute", "canvas_snapshot"];
 
 const PLOT_TOOL = /^mcp__(?:plot|plugin_plot_plot|.*[ _-]plot)__(.+)$/;
 
-const COMPACT_REMINDER = "Plot reminder after compaction: tool schemas are gone. Before a call you cannot write exactly, reload one (ToolSearch select:<name>, or read plot://tools/<name>); a rejected call ends with a usage: line. The server instructions still list the common signatures; they do not show these: canvas_patch operations are passed directly, {op:\"screens.upsert\", page_id, screens:[{id,title,file}]} (no viewport.height: the node fits its content) and {op:\"nodes.fit\", page_id, node_ids, reflow:true} only for ids in fit_pending. Snapshot inspect.node_ids as targets:[{type:\"node\", node_id}]; a tall node answers tiles.next: pass it unchanged. Edit on the server, no local copies; after a timeout repeat the same call and idempotency_key.";
+const COMPACT_REMINDER = "Plot reminder after compaction: tool schemas are gone. Before a call you cannot write exactly, reload one (ToolSearch select:<name>, or read plot://tools/<name>); a rejected call ends with a usage: line. The server instructions still list the common signatures; they do not show these: canvas_patch page_id on the call defaults each operation, {op:\"screens.upsert\", screens:[{id,title,file}]} (no viewport.height: the node fits its content), {op:\"nodes.fit\", node_ids, reflow:true} for ids in fit_pending (viewport_relative: give viewport.height instead), {op:\"nodes.remove\", id}. A tall snapshot answers tiles.next: pass it unchanged. After a timeout repeat the same call and idempotency_key (an execute that never started needs a new one).";
 
 const MESSAGES = {
   measurements: "Plot returned layout measurements. Inspect the indicated screen/element at readable size: scrolling and clipping may be intentional. Check the actual image, identify a concrete defect before changing it, and use focused refinement. Technical render success is not aesthetic approval. No obligation to add interactivity.",
   detail: "Plot suggests focused node previews: a canvas overview can hide small-screen defects. Inspect the relevant screen at legible size before handoff; do not infer quality from the overview alone.",
-  inspect: "Plot's write response says which screens changed (the inspect field; after execute, canvas_commit.build.changed_screens and fitted). When visual work is in scope, pass inspect.node_ids as canvas_snapshot targets:[{type:\"node\", node_id}] at legible size and refine concrete defects in hierarchy, imagery, typography or layout. A successful write is not visual verification; this advice does not authorize extra edits.",
-  fit_pending: "Plot could not fit some auto-height screens in that write (fit_pending names page_id and node_ids). Fit only those: canvas_patch {op:\"nodes.fit\", page_id, node_ids, reflow:true}, then snapshot them. Do not fit other screens.",
+  inspect: "Plot's write response says which screens changed (the inspect field; after execute, canvas_commit.inspect). When visual work is in scope, pass inspect.node_ids as canvas_snapshot targets:[{type:\"node\", node_id}] at legible size and refine concrete defects in hierarchy, imagery, typography or layout. A successful write is not visual verification; this advice does not authorize extra edits.",
+  fit_pending: "Plot could not fit some auto-height screens in that write (fit_pending names reason, page_id and node_ids). Fit only those: canvas_patch {op:\"nodes.fit\", page_id, node_ids, reflow:true}, then snapshot them; do not fit other screens. Exceptions: viewport_relative needs an explicit viewport height from you, and boundary (warning fit_blocked_by_boundary) needs the node taken out of its boundary first; nodes.fit alone does not help.",
   tiles: "A tall node was cut into tiles: this snapshot is one tile (tiles.count counts the tiles left, this one included). Pass tiles.next, the complete next call, unchanged for the next tile; a tile_revision_changed warning means the draft moved, so start the walk over. Aim crop or element at a suspect region instead of walking every tile.",
 };
 
@@ -28,12 +28,6 @@ function hasFitPending(value) {
 function hasMoreTiles(value) {
   const tiles = value?.tiles;
   return Boolean(tiles) && typeof tiles === "object" && !Array.isArray(tiles) && Boolean(tiles.next) && typeof tiles.next === "object";
-}
-
-// An execute commit has no inspect field: a rebuilt screen or a changed height is its signal.
-function hasChangedScreens(value) {
-  const rebuilt = value?.build?.changed_screens;
-  return (Array.isArray(rebuilt) && rebuilt.length > 0) || (Array.isArray(value?.fitted) && value.fitted.length > 0);
 }
 
 function hasInspectTargets(value) {
@@ -70,7 +64,7 @@ export function designContext(event, seen = []) {
     if (Array.isArray(value)) { for (const item of value.slice(0, 24)) inspect(item, depth + 1); return; }
     if (Array.isArray(value.visual_issues) && value.visual_issues.length) signals.add("measurements");
     if (Array.isArray(value.suggested_previews) && value.suggested_previews.length) signals.add("detail");
-    if (hasInspectTargets(value) || hasChangedScreens(value)) signals.add("inspect");
+    if (hasInspectTargets(value)) signals.add("inspect");
     if (hasFitPending(value)) signals.add("fit_pending");
     if (hasMoreTiles(value)) signals.add("tiles");
     for (const name of ["structuredContent", "content", "text", "data", "result", "emitted", "diagnostics", "preview", "canvasCommit", "canvas_commit", "captures"]) {

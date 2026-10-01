@@ -45,16 +45,25 @@ test("fit_pending in a write response, also inside an execute commit, yields the
   assert.equal(advice.key, "fit_pending");
   assert.match(advice.output.hookSpecificOutput.additionalContext, /nodes\.fit/);
   assert.ok(!JSON.stringify(advice).includes("time_budget"));
+  for (const reason of ["viewport_relative", "boundary"]) {
+    const other = designContext({ ...post, tool_response: { fit_pending: { reason, count: 1, pages: [{ page_id: "screens", node_ids: ["a"] }] } } });
+    assert.equal(other.key, "fit_pending");
+    assert.match(other.output.hookSpecificOutput.additionalContext, /viewport_relative[^]*boundary|boundary[^]*viewport_relative/);
+  }
   assert.equal(designContext({ ...post, tool_name: "mcp__plot__execute", tool_response: { structuredContent: { data: { canvas_commit: { revision: 4, ...pending } } } } }).key, "fit_pending");
   assert.equal(designContext({ ...post, tool_response: { fit_pending: { reason: "failed", count: 0, pages: [] } } }), null);
   assert.equal(designContext({ ...post, tool_response: { fitted: [] } }), null);
 });
-test("an execute commit has no inspect: rebuilt screens or fitted heights stand in for it", () => {
-  const commit = (canvas_commit) => designContext({ ...post, tool_name: "mcp__plot__execute", tool_response: { structuredContent: { data: { canvas_commit } } } });
-  assert.equal(commit({ build: { state: "built", changed_screens: ["/src/screens/home.tsx"] } }).key, "inspect");
-  assert.equal(commit({ fitted: [{ page_id: "screens", node_id: "home", rect_height: 900 }] }).key, "inspect");
-  assert.equal(commit({ build: { state: "built", changed_screens: [] }, files_written: ["/src/data/x.ts"] }), null);
-  assert.equal(commit({ build: { state: "pending", message: "building" } }), null);
+test("canvas_patch and an execute commit carry inspect; rebuilt screens or fitted heights without it are not a signal", () => {
+  const inspect = { page_id: "screens", node_ids: ["home"], count: 1 };
+  const commit = (canvas_commit) => designContext({ ...post, tool_name: "mcp__plot__execute", tool_response: { structuredContent: { canvas_commit } } });
+  assert.equal(designContext({ ...post, tool_name: "mcp__plot__canvas_patch", tool_response: { structuredContent: { status: "ok", changed: 1, upserted_screens: [{ page_id: "screens", node_ids: ["home"] }], inspect } } }).key, "inspect");
+  assert.equal(commit({ state: "committed", inspect }).key, "inspect");
+  assert.equal(commit({ state: "committed", inspect, build: { state: "built" }, fitted: [{ page_id: "screens", node_id: "home", rect_height: 900 }] }).key, "inspect");
+  assert.equal(commit({ build: { state: "built", changed_screens: ["/src/screens/home.tsx"] } }), null);
+  assert.equal(commit({ fitted: [{ page_id: "screens", node_id: "home", rect_height: 900 }] }), null);
+  assert.equal(commit({ state: "committed", files_written: [], build: { state: "pending", message: "building" } }), null);
+  assert.equal(designContext({ ...post, tool_name: "mcp__plot__canvas_patch", tool_response: { structuredContent: { status: "ok", changed: 0, upserted_screens: [] } } }), null);
 });
 test("a snapshot tile with tiles.next yields the tile advice, at top level and inside captures[]; the last tile does not", () => {
   const snapshot = { ...post, tool_name: "mcp__plot__canvas_snapshot" };
@@ -93,7 +102,7 @@ test("the compaction reminder is short, carries the shapes the instructions do n
   assert.ok(text.length <= 1000, `${text.length} characters`);
   assert.match(text, /schema/);
   assert.match(text, /instructions/);
-  for (const word of ["plot://tools/", "screens.upsert", "nodes.fit", "fit_pending", "inspect.node_ids", "targets", "tiles.next", "idempotency_key"]) assert.ok(text.includes(word), word);
+  for (const word of ["plot://tools/", "screens.upsert", "nodes.fit", "fit_pending", "viewport_relative", "nodes.remove", "tiles.next", "idempotency_key"]) assert.ok(text.includes(word), word);
   for (const source of ["startup", "resume", "clear", undefined]) assert.equal(designContext({ ...compact, source }), null);
 });
 test("hooks.json spawns only on advised Plot tools and on compaction", () => {

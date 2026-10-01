@@ -50,6 +50,10 @@ const FORBIDDEN = [
   [/close each thread/i, "comment_complete records the change; only the reviewer resolves a thread"],
   [/library_(?:get|save)[^\n]*\b(?:paths|edits)\b/, "library_get has no paths and library_save no edits (canvas_file_get / canvas_edit take the library ref)"],
   [/\bscreens\.upsert\b[^\n]*viewport:\s*\{[^}]*height/, "screens.upsert with a viewport height turns auto height off"],
+  [/nodes\.delete/, "the operation is nodes.remove (nodes.delete is the canvas_nodes_delete tool's wording)"],
+  [/\b(?:replaces?|replacing) (?:every|all|the)\b[^\n]{0,20}\b(?:pages|screens)\b|\bcomplete set\b/i, "screens[] is additive: it never replaces or removes pages"],
+  [/(?:canvas_patch|execute)[^\n]*(?:returns? no|without) `?inspect/i, "canvas_patch and execute commits return inspect"],
+  [/\bupserted_screens\b/, "inspect, not upserted_screens, names the nodes to snapshot"],
 ];
 
 test("skills, references and the canvas worker contain no wording the server forbids", () => {
@@ -78,10 +82,10 @@ test("the worker rules in references/ and in the canvas worker are the same text
 test("the canvas skill carries the 2026-10-01 contract: auto height, inspect, tiles, digest, attach, conflicts", () => {
   const skill = read("skills/plot-canvas/SKILL.md");
   const rules = read("references/worker-rules.md");
-  for (const word of ["fit_pending", "fitted", "inspect", "targets", "tiles", "tile_revision_changed", "captures[].error", "screens.upsert", "nodes.pack", "sections", "below", "attach", "path_exists", "library_get", "library_publish", "version:\"draft\"", "error.job", "canvas_commit", "comment_complete"]) {
+  for (const word of ["fit_pending", "fitted", "inspect", "targets", "tiles", "tile_revision_changed", "captures[].error", "screens.upsert", "nodes.pack", "nodes.remove", "viewport_relative", "fit_blocked_by_boundary", "EXECUTE_NOT_STARTED", "no_change", "ref_taken", "published_version", "sections", "below", "attach", "library_get", "library_publish", "version:\"draft\"", "error.job", "canvas_commit", "comment_complete"]) {
     assert.ok(skill.includes(word), `plot-canvas does not mention ${word}`);
   }
-  for (const word of ["file_changed", "revision_conflict", "edit_already_applied", "idempotency_key", "fit_pending", "tiles.next", "screens.upsert", "upserted_screens", "node_id"]) {
+  for (const word of ["file_changed", "revision_conflict", "edit_already_applied", "idempotency_key", "fit_pending", "tiles.next", "screens.upsert", "inspect", "node_id"]) {
     assert.ok(rules.includes(word), `worker rules do not mention ${word}`);
   }
 });
