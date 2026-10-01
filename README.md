@@ -11,7 +11,7 @@ The skills teach how to approach the work: read the canvas first, build React sc
 
 Claude Code also gets:
 
-- `plot:plot-canvas-worker`, a subagent for one parallel slice of canvas work. It preloads `plot-canvas`, cannot write local files, and expects the canvas ref, its own file paths and the library digest in its prompt. Codex has no plugin agents; the brief template in `plot-canvas` serves there.
+- `plot:plot-canvas-worker`, a subagent for one parallel slice of canvas work. It preloads `plot-canvas`, has no Bash or file-writing tools, and expects the canvas ref, its own file paths and the library digest in its prompt. Codex has no plugin agents; the brief template in `plot-canvas` serves there.
 - Advisory hooks that start a process only after Plot writes and snapshots, plus a short reminder after a conversation is compacted (tool schemas must be reloaded).
 
 ## Authentication

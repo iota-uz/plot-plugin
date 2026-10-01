@@ -55,12 +55,12 @@ test("skills, references and the canvas worker contain no wording the server for
   }
 });
 
-test("the canvas worker preloads the canvas skill, keeps its tools inherited and cannot write local files", () => {
+test("the canvas worker preloads the canvas skill, keeps its tools inherited and cannot write local files (no Bash, Write or Edit)", () => {
   const worker = read("agents/plot-canvas-worker.md");
   const frontmatter = worker.match(/^---\n([\s\S]*?)\n---/)[1];
   assert.match(frontmatter, /^name: plot-canvas-worker$/m);
   assert.match(frontmatter, /^skills:\n\s+- plot-canvas$/m);
-  assert.match(frontmatter, /^disallowedTools:.*\bWrite\b.*\bEdit\b/m);
+  assert.match(frontmatter, /^disallowedTools:.*\bBash\b.*\bWrite\b.*\bEdit\b/m);
   // Claude Code ignores these in plugin agents, and a tools allowlist would hide Plot tools whose prefix depends on how the server is installed.
   assert.doesNotMatch(frontmatter, /^(?:tools|hooks|mcpServers|permissionMode):/m);
 });
