@@ -13,7 +13,7 @@ const skills = contract.skills.map((name) => `skills/${name}/SKILL.md`);
 // A backticked token is a tool name when it carries a Plot tool family prefix, or is `execute`; a call such as
 // `canvas_snapshot({ref, targets})` names its tool before the parenthesis.
 const TOOL = /^(?:canvas|asset|library|comment|resource|job|screen|video|audio|image|character|voice)_[a-z_]+$|^execute$/;
-const NOT_TOOLS = new Set(["asset_ref", "asset_refs", "canvas_commit", "job_id"]); // argument and result keys that share a tool prefix
+const NOT_TOOLS = new Set(["asset_ref", "asset_refs", "canvas_commit", "canvas_url", "job_id"]); // argument and result keys that share a tool prefix
 const toolNames = (text) => [...new Set([...text.matchAll(/`([a-z_]+)(?:\([^`\n]*)?`/g)].map((match) => match[1]).filter((token) => TOOL.test(token) && !NOT_TOOLS.has(token)))];
 const references = readdirSync(join(root, "references")).map((name) => `references/${name}`);
 
@@ -92,9 +92,9 @@ test("the canvas skill carries the 2026-10-01 contract: auto height, inspect, ti
 
 test("contract.json names the server contract version that the changelog describes", () => {
   assert.match(contract.contractVersion, /^\d{4}-\d{2}-\d{2}$/);
-  const entry = read("../../CHANGELOG.md").split(/^## /m).find((section) => section.startsWith("0.3.0"));
-  assert.ok(entry?.includes(contract.contractVersion), "the 0.3.0 changelog entry names the contract version");
-  assert.equal(JSON.parse(read(".claude-plugin/plugin.json")).version, "0.3.0");
+  const entry = read("../../CHANGELOG.md").split(/^## /m).find((section) => section.startsWith("0.4.0"));
+  assert.ok(entry?.includes(contract.contractVersion), "the 0.4.0 changelog entry names the contract version");
+  assert.equal(JSON.parse(read(".claude-plugin/plugin.json")).version, "0.4.0");
 });
 
 test("the canvas worker preloads the canvas skill, keeps its tools inherited and cannot write local files (no Bash, Write or Edit)", () => {

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0 - 2026-10-05
+
+Still matches the Plot tool contract of 2026-10-01 (`contract.json` `contractVersion`); the new fields are additive, so the plugin also works against servers without them.
+
+- Node-level handoff: writes answer `inspect.url` (and `comment_list` threads carry `url`) — a deep link that opens the canvas at the changed node (`?page=…&node=…`, one shared entry contract behind the SPA and the server). The skill's handoff rule and the inspect hook advice now say to give that deep link, never the bare canvas URL when the work is one node. Needs the Plot server release carrying those fields.
+- `plot-canvas` stays within its 8000-character budget (7983): the handoff and verification wording was tightened to make room.
+
 ## 0.3.0 - 2026-10-05
 
 Still matches the Plot tool contract of 2026-10-01 (`contract.json` `contractVersion`); the one new signal is additive, so the plugin also works against servers without it.
