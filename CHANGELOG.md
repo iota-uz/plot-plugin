@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0 - 2026-10-05
+
+Still matches the Plot tool contract of 2026-10-01 (`contract.json` `contractVersion`); the one new signal is additive, so the plugin also works against servers without it.
+
+- Grouping advice: `canvas_save`/`canvas_patch` answers `structure_suggestion: {page_id, screen_count}` when a page holds eight-plus screens and no grouping structure (no groups, lanes, stages, boundaries or `nodes.pack` sections). The PostToolUse hook turns that into one-per-session advice to re-pack the page into titled sections (delivery states as titles) or wrap fixed-position screens in `groups`; the field itself is advice, never a warning. Needs the Plot server release carrying that field.
+- `plot-canvas` keeps every screen of an eight-plus-screen page in a titled section and re-packs when a write answers `structure_suggestion`; screen-board conventions (sections by delivery state: Ready for dev / In development / Implemented; a design change to an implemented screen moves it back, with a comment thread recording the drift) live in `references/authoring-principles.md`.
+
 ## 0.2.0 - 2026-10-01
 
 Matches the Plot tool contract of 2026-10-01 (`contract.json` `contractVersion`; the server lists its changes at `plot://tools`). Install together with that server release.

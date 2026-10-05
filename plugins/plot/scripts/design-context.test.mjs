@@ -118,6 +118,24 @@ test("hooks.json spawns only on advised Plot tools and on compaction", () => {
   assert.equal(JSON.stringify(hooks).includes("PreToolUse"), false);
 });
 
+test("structure_suggestion in a write response yields the grouping advice once, without quoting the page", () => {
+  const withStructure = { ...post, tool_response: { structuredContent: { ok: true, structure_suggestion: { page_id: "board1", screen_count: 11 } } } };
+  const advice = designContext(withStructure);
+  assert.equal(advice.key, "structure");
+  assert.match(advice.output.hookSpecificOutput.additionalContext, /nodes\.pack/);
+  assert.match(advice.output.hookSpecificOutput.additionalContext, /groups\.add/);
+  assert.ok(!JSON.stringify(advice).includes("board1"));
+  assert.ok(!JSON.stringify(advice).includes("screen_count"));
+  assert.equal(designContext(withStructure, [advice.key]), null);
+});
+test("structure_suggestion yields to stronger signals and an empty suggestion is not one", () => {
+  const both = { structuredContent: { ok: true, structure_suggestion: { page_id: "board1", screen_count: 11 }, inspect: { page_id: "p", node_ids: ["a"], count: 1 } } };
+  assert.equal(designContext({ ...post, tool_response: both }).key, "inspect");
+  assert.equal(designContext({ ...post, tool_response: both }, ["inspect"]).key, "structure");
+  assert.equal(designContext({ ...post, tool_response: { structure_suggestion: { page_id: "board1", screen_count: 0 } } }), null);
+  assert.equal(designContext({ ...post, tool_response: { structure_suggestion: null } }), null);
+  assert.equal(designContext({ ...post, tool_response: { warnings: [{ code: "node_overlap" }] } }), null);
+});
 test("stdin adapter fails open, isolates sessions and reminds only Plot sessions after compaction", () => {
   const directory = mkdtempSync(join(tmpdir(), "plot-hook-test-"));
   const run = (input) => spawnSync(process.execPath, [fileURLToPath(new URL("./design-context.mjs", import.meta.url))], { input: JSON.stringify(input), encoding: "utf8", env: { ...process.env, TMPDIR: directory, TMP: directory, TEMP: directory } });

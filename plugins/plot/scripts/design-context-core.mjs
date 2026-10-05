@@ -2,9 +2,11 @@
 
 // Plot tools after which advice is useful: writes and snapshots. hooks/hooks.json
 // carries the same list in its matcher; design-context.test.mjs keeps them equal.
-// Response fields read (contract 2026-10-01): visual_issues, suggested_previews,
+// Response fields read (contract 2026-10-05): visual_issues, suggested_previews,
 // inspect and fit_pending (writes; execute carries them in canvas_commit),
-// tiles.next (canvas_snapshot, top level and in captures[]).
+// tiles.next (canvas_snapshot, top level and in captures[]), and
+// structure_suggestion (canvas_save/canvas_patch name a page of many screens
+// without grouping structure).
 export const ADVISED_TOOLS = ["canvas_save", "canvas_edit", "canvas_apply_patch", "canvas_patch", "canvas_nodes_move", "canvas_nodes_delete", "execute", "canvas_snapshot"];
 
 const PLOT_TOOL = /^mcp__(?:plot|plugin_plot_plot|.*[ _-]plot)__(.+)$/;
@@ -17,6 +19,7 @@ const MESSAGES = {
   inspect: "Plot's write response says which screens changed (the inspect field; after execute, canvas_commit.inspect). When visual work is in scope, pass inspect.node_ids as canvas_snapshot targets:[{type:\"node\", node_id}] at legible size and refine concrete defects in hierarchy, imagery, typography or layout. A successful write is not visual verification; this advice does not authorize extra edits.",
   fit_pending: "Plot could not fit some auto-height screens in that write (fit_pending names reason, page_id and node_ids). Fit only those: canvas_patch {op:\"nodes.fit\", page_id, node_ids, reflow:true}, then snapshot them; do not fit other screens. Exceptions: viewport_relative needs an explicit viewport height from you, and boundary (warning fit_blocked_by_boundary) needs the node taken out of its boundary first; nodes.fit alone does not help.",
   tiles: "A tall node was cut into tiles: this snapshot is one tile (tiles.count counts the tiles left, this one included). Pass tiles.next, the complete next call, unchanged for the next tile; a tile_revision_changed warning means the draft moved, so start the walk over. Aim crop or element at a suspect region instead of walking every tile.",
+  structure: "Plot suggests grouping this page (structure_suggestion names a page holding many screens with no sections, groups, lanes or stages): a flat wall of screens is hard to read and hand off. Lay it out as titled sections with canvas_patch {op:\"nodes.pack\", page_id, value:{sections:[{title, node_ids}]}} — repeating the call updates titles in place — using delivery states as titles (Ready for dev / Implemented) when the page tracks implementation, or wrap fixed-position screens in {op:\"groups.add\", value:{id, label, nodeIds}}. Advice, not a defect: an intentional flat grid stays flat.",
 };
 
 function hasFitPending(value) {
@@ -34,6 +37,12 @@ function hasInspectTargets(value) {
   const inspect = value?.inspect;
   if (!inspect || typeof inspect !== "object" || Array.isArray(inspect)) return false;
   return (Array.isArray(inspect.node_ids) && inspect.node_ids.length > 0) || (typeof inspect.count === "number" && inspect.count > 0);
+}
+
+function hasStructureSuggestion(value) {
+  const suggestion = value?.structure_suggestion;
+  if (!suggestion || typeof suggestion !== "object" || Array.isArray(suggestion)) return false;
+  return typeof suggestion.screen_count === "number" && suggestion.screen_count > 0 && typeof suggestion.page_id === "string";
 }
 
 export function isAdvisedPlotTool(event) {
@@ -67,13 +76,14 @@ export function designContext(event, seen = []) {
     if (hasInspectTargets(value)) signals.add("inspect");
     if (hasFitPending(value)) signals.add("fit_pending");
     if (hasMoreTiles(value)) signals.add("tiles");
+    if (hasStructureSuggestion(value)) signals.add("structure");
     for (const name of ["structuredContent", "content", "text", "data", "result", "emitted", "diagnostics", "preview", "canvasCommit", "canvas_commit", "captures"]) {
       if (name in value) inspect(value[name], depth + 1);
     }
   }
   inspect(event.tool_response);
   // The first signal not yet advised in this session, in this priority order.
-  const key = ["measurements", "detail", "fit_pending", "inspect", "tiles"].find((name) => signals.has(name) && !seen.includes(name));
+  const key = ["measurements", "detail", "fit_pending", "inspect", "tiles", "structure"].find((name) => signals.has(name) && !seen.includes(name));
   if (!key) return null;
   return { key, persist: true, output: { hookSpecificOutput: { hookEventName: phase, additionalContext: MESSAGES[key] } } };
 }

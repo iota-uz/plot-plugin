@@ -1,6 +1,6 @@
 {
   "name": "plot",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Create and refine interfaces, diagrams, reports, videos, and character scenes in Plot through its remote MCP server.",
   "author": {
     "name": "iota.uz",
@@ -9,7 +9,14 @@
   "homepage": "https://canvas.iota.uz",
   "repository": "https://github.com/iota-uz/plot-plugin",
   "license": "Apache-2.0",
-  "keywords": ["plot", "design", "canvas", "video", "character", "mcp"],
+  "keywords": [
+    "plot",
+    "design",
+    "canvas",
+    "video",
+    "character",
+    "mcp"
+  ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Plot",
@@ -17,7 +24,11 @@
     "longDescription": "Behavioral guidance and a remote MCP connection for creating, inspecting, and refining visual canvases, prototypes, videos, sound, and character performances in Plot.",
     "developerName": "iota.uz",
     "category": "Productivity",
-    "capabilities": ["Interactive", "Read", "Write"],
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
     "websiteURL": "https://canvas.iota.uz",
     "defaultPrompt": [
       "Design a production-ready interface in Plot.",

@@ -1,7 +1,7 @@
 {
   "name": "plot",
   "displayName": "Plot",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Create and refine interfaces, diagrams, reports, videos, and character scenes in Plot through its remote MCP server.",
   "author": {
     "name": "iota.uz",
@@ -10,6 +10,13 @@
   "homepage": "https://canvas.iota.uz",
   "repository": "https://github.com/iota-uz/plot-plugin",
   "license": "Apache-2.0",
-  "keywords": ["plot", "design", "canvas", "video", "character", "mcp"],
+  "keywords": [
+    "plot",
+    "design",
+    "canvas",
+    "video",
+    "character",
+    "mcp"
+  ],
   "mcpServers": "./.mcp.json"
 }
