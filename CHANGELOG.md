@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0 - 2026-10-05
+
+Matches the Plot tool contract of 2026-10-01; the changed defaults are server-side, so the plugin also works against older servers (there `wait_ms` is simply ignored by tools that lack it).
+
+- No more poll loops: `canvas_snapshot` and `screen_inspect` wait inline by default (`wait_ms` 20000) and `job_get` long-polls until every requested job is terminal (default 25 s). The skill now says a queued/running receipt means a deep queue — repeat the same idempotency_key or call `job_get`, never a `wait_ms:0` poll loop. Needs the Plot server release carrying `adr/mcp/inline-wait-by-default.md`.
+- `plot-canvas` stays within its 8000-character budget (7982): snapshot-tile and asset-attach wording tightened to make room.
+
 ## 0.4.0 - 2026-10-05
 
 Still matches the Plot tool contract of 2026-10-01 (`contract.json` `contractVersion`); the new fields are additive, so the plugin also works against servers without them.

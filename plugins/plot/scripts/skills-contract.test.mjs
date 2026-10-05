@@ -92,9 +92,9 @@ test("the canvas skill carries the 2026-10-01 contract: auto height, inspect, ti
 
 test("contract.json names the server contract version that the changelog describes", () => {
   assert.match(contract.contractVersion, /^\d{4}-\d{2}-\d{2}$/);
-  const entry = read("../../CHANGELOG.md").split(/^## /m).find((section) => section.startsWith("0.4.0"));
-  assert.ok(entry?.includes(contract.contractVersion), "the 0.4.0 changelog entry names the contract version");
-  assert.equal(JSON.parse(read(".claude-plugin/plugin.json")).version, "0.4.0");
+  const entry = read("../../CHANGELOG.md").split(/^## /m).find((section) => section.startsWith("0.5.0"));
+  assert.ok(entry?.includes(contract.contractVersion), "the 0.5.0 changelog entry names the contract version");
+  assert.equal(JSON.parse(read(".claude-plugin/plugin.json")).version, "0.5.0");
 });
 
 test("the canvas worker preloads the canvas skill, keeps its tools inherited and cannot write local files (no Bash, Write or Edit)", () => {

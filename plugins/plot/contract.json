@@ -22,6 +22,7 @@
     "comment_complete",
     "comment_list",
     "execute",
+    "job_get",
     "library_get",
     "library_publish",
     "resource_find",
