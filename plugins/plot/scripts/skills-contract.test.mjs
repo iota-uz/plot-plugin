@@ -48,12 +48,14 @@ const FORBIDDEN = [
   [/canvas_shell[^\n]*\bscript\b|`script`/, "canvas_shell takes command, not script"],
   [/\{\s*old\s*[:,]/, "files.patch takes {old_string, new_string}"],
   [/close each thread/i, "comment_complete records the change; only the reviewer resolves a thread"],
-  [/library_(?:get|save)[^\n]*\b(?:paths|edits)\b/, "library_get has no paths and library_save no edits (canvas_file_get / canvas_edit take the library ref)"],
+  [/\blibrary_(?:get|save)[^\n]*\b(?:paths|edits)\b/, "library_get has no paths and library_save no edits (canvas_file_get / canvas_edit take the library ref)"],
   [/\bscreens\.upsert\b[^\n]*viewport:\s*\{[^}]*height/, "screens.upsert with a viewport height turns auto height off"],
   [/nodes\.delete/, "the operation is nodes.remove (nodes.delete is the canvas_nodes_delete tool's wording)"],
   [/\b(?:replaces?|replacing) (?:every|all|the)\b[^\n]{0,20}\b(?:pages|screens)\b|\bcomplete set\b/i, "screens[] is additive: it never replaces or removes pages"],
   [/(?:canvas_patch|execute)[^\n]*(?:returns? no|without) `?inspect/i, "canvas_patch and execute commits return inspect"],
   [/\bupserted_screens\b/, "inspect, not upserted_screens, names the nodes to snapshot"],
+  [/\bvideo_(?:loop|comment|code)_[a-z_]+|\bvideo_operation_get\b/, "removed video tools (requests and proposals, motion library, video_receipt_get replace them)"],
+  [/\bvideo_(?:script|timeline|variant)_patch\b/, "agents never patch video documents directly: video_proposal_submit"],
 ];
 
 test("skills, references and the canvas worker contain no wording the server forbids", () => {
@@ -92,9 +94,9 @@ test("the canvas skill carries the 2026-10-01 contract: auto height, inspect, ti
 
 test("contract.json names the server contract version that the changelog describes", () => {
   assert.match(contract.contractVersion, /^\d{4}-\d{2}-\d{2}$/);
-  const entry = read("../../CHANGELOG.md").split(/^## /m).find((section) => section.startsWith("0.5.0"));
-  assert.ok(entry?.includes(contract.contractVersion), "the 0.5.0 changelog entry names the contract version");
-  assert.equal(JSON.parse(read(".claude-plugin/plugin.json")).version, "0.5.0");
+  const entry = read("../../CHANGELOG.md").split(/^## /m).find((section) => section.startsWith("0.6.0"));
+  assert.ok(entry?.includes(contract.contractVersion), "the 0.6.0 changelog entry names the contract version");
+  assert.equal(JSON.parse(read(".claude-plugin/plugin.json")).version, "0.6.0");
 });
 
 test("the canvas worker preloads the canvas skill, keeps its tools inherited and cannot write local files (no Bash, Write or Edit)", () => {
@@ -113,4 +115,11 @@ test("the canvas skill stays within its size budget and states the precedence of
   assert.match(skill, /canvas\.iota\.uz/);
   assert.match(skill, /they win/);
   assert.match(skill, /plot:plot-canvas-worker/);
+});
+
+test("the video skill carries the request/proposal model of 2026-10-19", () => {
+  const skill = read("skills/plot-video/SKILL.md");
+  for (const word of ["video_request_claim", "video_proposal_submit", "video_proposal_preview", "master", "variant", "video_motion_library_get", "video_motion_shell", "allowPaid", "allow_paid", "request_id", "STALE_BASE", "APPROVAL_REQUIRED", "video_receipt_get"]) {
+    assert.ok(skill.includes(word), `plot-video does not mention ${word}`);
+  }
 });
