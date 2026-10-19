@@ -41,7 +41,7 @@ Search workspace and shared libraries (`asset_list`, `asset_get`) before generat
 
 ## Preview, render and evidence
 
-- `video_proposal_preview` (the request, one language, the same `changes`; `expected_library_revision` with motion clips) builds a version of what Accept would produce. It never moves the draft or the language's current version and is never approvable. Render it with `video_render` (`version_id`, `request_id`), then submit with `preview_version_id` and the evidence ids the tool schema accepts.
+- `video_proposal_preview` (the request, one language, the same `changes`; `expected_library_revision` with motion clips) builds a version of what Accept would produce. It never moves the draft or the language's current version and is never approvable. Render it with `video_render` (`version_id`, `request_id`), then submit with `preview_version_id` and any `evidence_ids`. An evidence id is not a job id: it is `result.evidenceId` from `job_get` of a `video_render` submitted with `rubricHash` and `rubricPolicy` (from `execute` `tools.video_rubric_resolve`) or of a `video_critique`. Plain renders, `video_qa` and `video_frames` register none; a proposal without evidence is valid.
 - Watch the exact rendered bytes with sound: `video_inspect` for technical facts, `video_frames` for frames, `video_qa` for checks. A poster or contact sheet cannot establish continuity, audio sync or pacing. `video_critique` is a paid independent evaluation, not approval.
 - `video_checkpoint` pins the current documents of one language into a version (for example a baseline before a change); it does not render or approve.
 
