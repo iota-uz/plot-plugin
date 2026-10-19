@@ -37,14 +37,16 @@
     "video_checkpoint",
     "video_context_get",
     "video_critique",
+    "video_exports_delete",
+    "video_exports_restore",
     "video_frames",
     "video_inspect",
     "video_motion_library_get",
     "video_motion_shell",
     "video_project_create",
+    "video_projects_move",
     "video_proposal_preview",
     "video_proposal_submit",
-    "video_publication_record",
     "video_qa",
     "video_receipt_get",
     "video_render",
@@ -60,5 +62,8 @@
     "video_variant_get",
     "voice_generate"
   ],
-  "contractVersion": "2026-10-19"
+  "contractVersion": "2026-10-20",
+  "requiredExecuteTools": [
+    "video_publication_record"
+  ]
 }

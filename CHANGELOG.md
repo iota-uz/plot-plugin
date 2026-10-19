@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.7.0 — 2026-10-20
+
+- Batch archive/restore of old video exports, with protected approvals/publications/evidence and stable retries. Media bytes are retained.
+- Preview/commit batch relocation of video projects with master, variants, motion library, requests, history and pinned media/movements. Requires server contract 2026-10-20 / backend 3.
+- Lifecycle skill reference documents per-item atomicity, size limits, replay and direct cross-workspace calls.
+
 ## 0.6.0 - 2026-10-19
 
 Matches the Plot tool contract of 2026-10-19 (`contract.json` `contractVersion`; the server lists its changes at `plot://tools`). Install together with that server release: the video changes are breaking.

@@ -56,3 +56,5 @@ For recovery after an unknown outcome and side effects, read [recovery](../../re
 ## Handoff
 
 Report the project, language, request and proposal, preview version, render hash, review URL, creative hypothesis, evidence, unresolved findings, and the next human decision. Never imply acceptance, approval or publication that did not happen.
+
+For `video_exports_delete`, `video_exports_restore`, `video_projects_move`, export archival/restoration and moving projects between workspaces, read `../../references/video-lifecycle.md`. Preview moves before committing; inspect every batch item.

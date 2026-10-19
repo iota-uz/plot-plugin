@@ -7,7 +7,7 @@ The plugin contains two behavioral skills:
 - `plot-canvas` for screens, documents, diagrams, reports, prototypes, and spatial canvases.
 - `plot-video` for timed media, sound, renders, and character performances.
 
-The skills teach how to approach the work: for canvases, read the canvas first, build React screens on a shared component library, edit on the server without local copies, and verify the result with snapshots; for video, claim a human request, propose changes to the master and its language variants with a rendered preview, and leave acceptance and render approval to the human. The server instructions and tool schemas stay the source of truth for tool names and arguments; the plugin does not bundle the private Plot backend, credentials, or a copy of the tool catalog. This release (0.6.0) matches the Plot tool contract of 2026-10-19 (`plot://tools` lists its changes); `contract.json` records the version and the tools the skills name.
+The skills teach how to approach the work: for canvases, read the canvas first, build React screens on a shared component library, edit on the server without local copies, and verify the result with snapshots; for video, claim a human request, propose changes to the master and its language variants with a rendered preview, and leave acceptance and render approval to the human. The server instructions and tool schemas stay the source of truth for tool names and arguments; the plugin does not bundle the private Plot backend, credentials, or a copy of the tool catalog. This release (0.7.0) matches the Plot tool contract of 2026-10-20 (`plot://tools` lists its changes); `contract.json` records the version and the tools the skills name.
 
 Claude Code also gets:
 

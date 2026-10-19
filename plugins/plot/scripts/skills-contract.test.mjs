@@ -21,7 +21,7 @@ test("every tool the skills and the canvas worker name is in contract.json requi
   for (const file of [...skills, ...agents]) {
     const names = toolNames(read(file));
     assert.ok(names.length > 0, `${file} names no tools`);
-    assert.deepEqual(names.filter((name) => !contract.requiredTools.includes(name)), [], file);
+    assert.deepEqual(names.filter((name) => ![...contract.requiredTools,...(contract.requiredExecuteTools ?? [])].includes(name)), [], file);
   }
   assert.equal(new Set(contract.requiredTools).size, contract.requiredTools.length);
 });
@@ -71,7 +71,7 @@ test("skills, references and the canvas worker contain no wording the server for
 test("every tool the worker rules name is in contract.json requiredTools", () => {
   const names = toolNames(read("references/worker-rules.md"));
   assert.ok(names.length > 0);
-  assert.deepEqual(names.filter((name) => !contract.requiredTools.includes(name)), []);
+  assert.deepEqual(names.filter((name) => ![...contract.requiredTools,...(contract.requiredExecuteTools ?? [])].includes(name)), []);
 });
 
 test("the worker rules in references/ and in the canvas worker are the same text", () => {
@@ -94,9 +94,9 @@ test("the canvas skill carries the 2026-10-01 contract: auto height, inspect, ti
 
 test("contract.json names the server contract version that the changelog describes", () => {
   assert.match(contract.contractVersion, /^\d{4}-\d{2}-\d{2}$/);
-  const entry = read("../../CHANGELOG.md").split(/^## /m).find((section) => section.startsWith("0.6.0"));
-  assert.ok(entry?.includes(contract.contractVersion), "the 0.6.0 changelog entry names the contract version");
-  assert.equal(JSON.parse(read(".claude-plugin/plugin.json")).version, "0.6.0");
+  const entry = read("../../CHANGELOG.md").split(/^## /m).find((section) => section.startsWith("0.7.0"));
+  assert.ok(entry?.includes(contract.contractVersion), "the 0.7.0 changelog entry names the contract version");
+  assert.equal(JSON.parse(read(".claude-plugin/plugin.json")).version, "0.7.0");
 });
 
 test("the canvas worker preloads the canvas skill, keeps its tools inherited and cannot write local files (no Bash, Write or Edit)", () => {
