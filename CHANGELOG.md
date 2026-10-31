@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.0 - 2026-10-31
+
+Requires server contract 2.12.0. The server exposes one tool, `execute`, running TypeScript against `plot.<namespace>.<method>`; the 54 per-feature tools are gone. The canvas and video skills, the canvas worker and the references are rewritten around it and carry judgement only; signatures come from `plot.help` and the server instructions. `contract.json` lists the registry operations, and the contract test checks every `plot.*` call the plugin names against them.
+
 ## 0.7.0 — 2026-10-20
 
 - Batch archive/restore of old video exports, with protected approvals/publications/evidence and stable retries. Media bytes are retained.

@@ -9,94 +9,42 @@ const read = (path) => readFileSync(join(root, path), "utf8");
 const contract = JSON.parse(read("contract.json"));
 const agents = readdirSync(join(root, "agents")).map((name) => `agents/${name}`);
 const skills = contract.skills.map((name) => `skills/${name}/SKILL.md`);
-
-// A backticked token is a tool name when it carries a Plot tool family prefix, or is `execute`; a call such as
-// `canvas_snapshot({ref, targets})` names its tool before the parenthesis.
-const TOOL = /^(?:canvas|asset|library|comment|resource|job|screen|video|audio|image|character|voice)_[a-z_]+$|^execute$/;
-const NOT_TOOLS = new Set(["asset_ref", "asset_refs", "canvas_commit", "canvas_url", "job_id"]); // argument and result keys that share a tool prefix
-const toolNames = (text) => [...new Set([...text.matchAll(/`([a-z_]+)(?:\([^`\n]*)?`/g)].map((match) => match[1]).filter((token) => TOOL.test(token) && !NOT_TOOLS.has(token)))];
 const references = readdirSync(join(root, "references")).map((name) => `references/${name}`);
+const everything = [...skills, ...agents, ...references];
 
-test("every tool the skills and the canvas worker name is in contract.json requiredTools", () => {
-  for (const file of [...skills, ...agents]) {
-    const names = toolNames(read(file));
-    assert.ok(names.length > 0, `${file} names no tools`);
-    assert.deepEqual(names.filter((name) => ![...contract.requiredTools,...(contract.requiredExecuteTools ?? [])].includes(name)), [], file);
+// The server exposes one tool, `execute`. A backticked `plot.<namespace>.<method>` must be an operation of its registry.
+const operations = new Set(contract.operations);
+const calls = (text) => [...text.matchAll(/`plot\.([a-z]+)\.([A-Za-z]+)[`(({]/g)].map((match) => `${match[1]}.${match[2]}`);
+
+test("contract.json requires exactly the one tool the server exposes", () => {
+  assert.deepEqual(contract.requiredTools, ["execute"]);
+  assert.equal(new Set(contract.operations).size, contract.operations.length);
+});
+
+test("every plot.<namespace>.<method> the skills, references and the worker name is a registry operation", () => {
+  for (const file of everything) {
+    const unknown = calls(read(file)).filter((name) => !operations.has(name));
+    assert.deepEqual(unknown, [], file);
   }
-  assert.equal(new Set(contract.requiredTools).size, contract.requiredTools.length);
+  for (const file of [...skills, ...agents]) assert.ok(read(file).includes("`execute`"), `${file} never names execute`);
 });
 
-test("requiredTools lists only tools some skill or agent names", () => {
-  const named = new Set([...skills, ...agents].flatMap((file) => toolNames(read(file))));
-  assert.deepEqual(contract.requiredTools.filter((name) => !named.has(name)), []);
-});
-
-// Wording the server contract has retired or forbids.
+// Tools and wording the server contract has retired.
 const FORBIDDEN = [
-  [/scratchpad/i, "local scratchpad drafting"],
-  [/drafting/i, "local drafting"],
-  [/Keep HTML maintainable/i, "HTML-first authoring"],
-  [/Inline HTML/i, "HTML-first authoring"],
-  [/recommendations/i, "recommendations (replaced by inspect)"],
-  [/inspect_changed_canvas/, "recommendation code (replaced by inspect)"],
-  [/page\.doc\.patch/, "removed page.doc.patch wrapper"],
-  [/scope\s*:\s*\{/, "removed execute scope object"],
-  [/"?target"?\s*:\s*\{/, "removed top-level snapshot target"],
-  [/draft_id|canvas\.preview\(/, "staged previews"],
-  [/retry (?:it )?with a new idempotency/i, "the server asks for the same call, not a new key"],
-  [/let the server fit heights/i, "nodes.fit is only for ids in fit_pending (new screens fit themselves)"],
-  [/canvas_shell[^\n]*\bscript\b|`script`/, "canvas_shell takes command, not script"],
-  [/\{\s*old\s*[:,]/, "files.patch takes {old_string, new_string}"],
-  [/close each thread/i, "comment_complete records the change; only the reviewer resolves a thread"],
-  [/\blibrary_(?:get|save)[^\n]*\b(?:paths|edits)\b/, "library_get has no paths and library_save no edits (canvas_file_get / canvas_edit take the library ref)"],
-  [/\bscreens\.upsert\b[^\n]*viewport:\s*\{[^}]*height/, "screens.upsert with a viewport height turns auto height off"],
-  [/nodes\.delete/, "the operation is nodes.remove (nodes.delete is the canvas_nodes_delete tool's wording)"],
-  [/\b(?:replaces?|replacing) (?:every|all|the)\b[^\n]{0,20}\b(?:pages|screens)\b|\bcomplete set\b/i, "screens[] is additive: it never replaces or removes pages"],
-  [/(?:canvas_patch|execute)[^\n]*(?:returns? no|without) `?inspect/i, "canvas_patch and execute commits return inspect"],
-  [/\bupserted_screens\b/, "inspect, not upserted_screens, names the nodes to snapshot"],
-  [/\bvideo_(?:loop|comment|code)_[a-z_]+|\bvideo_operation_get\b/, "removed video tools (requests and proposals, motion library, video_receipt_get replace them)"],
-  [/\bvideo_(?:script|timeline|variant)_patch\b/, "agents never patch video documents directly: video_proposal_submit"],
+  [/`(?:canvas|screen|library|comment|resource|asset|job|video|audio|image|character|voice)_[a-z_]+`/, "removed per-feature tool; use execute and plot.<namespace>.<method>"],
+  [/scratchpad|local drafting/i, "local drafting"],
+  [/HTML-first|Inline HTML/i, "HTML-first authoring"],
+  [/retry (?:it )?with a new idempotency/i, "the server asks for the same call and key"],
 ];
 
-test("skills, references and the canvas worker contain no wording the server forbids", () => {
-  for (const file of [...skills, ...agents, ...references]) {
+test("skills, references and the canvas worker contain no retired tool names or wording", () => {
+  for (const file of everything) {
     const text = read(file);
     for (const [pattern, reason] of FORBIDDEN) {
       const match = pattern.exec(text);
       assert.equal(match, null, `${file}: ${reason} (${match?.[0]})`);
     }
   }
-});
-
-test("every tool the worker rules name is in contract.json requiredTools", () => {
-  const names = toolNames(read("references/worker-rules.md"));
-  assert.ok(names.length > 0);
-  assert.deepEqual(names.filter((name) => ![...contract.requiredTools,...(contract.requiredExecuteTools ?? [])].includes(name)), []);
-});
-
-test("the worker rules in references/ and in the canvas worker are the same text", () => {
-  const bullets = (text) => text.split("\n").filter((line) => line.startsWith("- "));
-  const rules = bullets(read("references/worker-rules.md"));
-  assert.ok(rules.length >= 8);
-  assert.deepEqual(bullets(read("agents/plot-canvas-worker.md")), rules);
-});
-
-test("the canvas skill carries the 2026-10-01 contract: auto height, inspect, tiles, digest, attach, conflicts", () => {
-  const skill = read("skills/plot-canvas/SKILL.md");
-  const rules = read("references/worker-rules.md");
-  for (const word of ["fit_pending", "fitted", "inspect", "targets", "tiles", "tile_revision_changed", "captures[].error", "screens.upsert", "nodes.pack", "nodes.remove", "viewport_relative", "fit_blocked_by_boundary", "EXECUTE_NOT_STARTED", "no_change", "ref_taken", "published_version", "sections", "below", "attach", "library_get", "library_publish", "version:\"draft\"", "error.job", "canvas_commit", "comment_complete"]) {
-    assert.ok(skill.includes(word), `plot-canvas does not mention ${word}`);
-  }
-  for (const word of ["file_changed", "revision_conflict", "edit_already_applied", "idempotency_key", "fit_pending", "tiles.next", "screens.upsert", "inspect", "node_id"]) {
-    assert.ok(rules.includes(word), `worker rules do not mention ${word}`);
-  }
-});
-
-test("contract.json names the server contract version that the changelog describes", () => {
-  assert.match(contract.contractVersion, /^\d{4}-\d{2}-\d{2}$/);
-  const entry = read("../../CHANGELOG.md").split(/^## /m).find((section) => section.startsWith("0.7.0"));
-  assert.ok(entry?.includes(contract.contractVersion), "the 0.7.0 changelog entry names the contract version");
-  assert.equal(JSON.parse(read(".claude-plugin/plugin.json")).version, "0.7.0");
 });
 
 test("the canvas worker preloads the canvas skill, keeps its tools inherited and cannot write local files (no Bash, Write or Edit)", () => {
@@ -109,17 +57,17 @@ test("the canvas worker preloads the canvas skill, keeps its tools inherited and
   assert.doesNotMatch(frontmatter, /^(?:tools|hooks|mcpServers|permissionMode):/m);
 });
 
-test("the canvas skill stays within its size budget and states the precedence of the server", () => {
-  const skill = read("skills/plot-canvas/SKILL.md");
-  assert.ok(skill.length <= 8000, `${skill.length} characters`);
-  assert.match(skill, /canvas\.iota\.uz/);
-  assert.match(skill, /they win/);
-  assert.match(skill, /plot:plot-canvas-worker/);
+test("the skills stay within their size budget and state the precedence of the server", () => {
+  for (const file of skills) assert.ok(read(file).length <= 8000, `${file}: ${read(file).length} characters`);
+  const canvas = read("skills/plot-canvas/SKILL.md");
+  assert.match(canvas, /canvas\.iota\.uz/);
+  assert.match(canvas, /they win/);
+  assert.match(canvas, /plot:plot-canvas-worker/);
 });
 
-test("the video skill carries the request/proposal model of 2026-10-19", () => {
-  const skill = read("skills/plot-video/SKILL.md");
-  for (const word of ["video_request_claim", "video_proposal_submit", "video_proposal_preview", "master", "variant", "video_motion_library_get", "video_motion_shell", "allowPaid", "allow_paid", "request_id", "STALE_BASE", "APPROVAL_REQUIRED", "video_receipt_get"]) {
-    assert.ok(skill.includes(word), `plot-video does not mention ${word}`);
-  }
+test("contract.json names the server contract version that the changelog describes", () => {
+  assert.match(contract.contractVersion, /^\d+\.\d+\.\d+$/);
+  const version = JSON.parse(read(".claude-plugin/plugin.json")).version;
+  const entry = read("../../CHANGELOG.md").split(/^## /m).find((section) => section.startsWith(version));
+  assert.ok(entry?.includes(contract.contractVersion), `the ${version} changelog entry names the contract version`);
 });
