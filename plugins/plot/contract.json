@@ -10,7 +10,7 @@
     "execute",
     "lookup"
   ],
-  "contractVersion": "2.13.0",
+  "contractVersion": "2.14.0",
   "operations": [
     "analytics.import",
     "analytics.read",

@@ -13,7 +13,7 @@ You are one of several workers on a Plot canvas. The lead's prompt names the tar
 - Use the library summary from the brief; do not read library source. If it is missing, read `plot.objects.read` facets `exports`, `types`, `styles` once.
 - Data a program generates: produce it in the `execute` code or with `plot.processes.exec`, then write it with `plot.files.apply`, only for your files.
 - Others write at the same time: no `plot.objects.checkpoint`, no pack or move commands in `plot.edit.apply`, no changes to other nodes or to the shared document.
-- On a timeout, `OUTCOME_UNKNOWN` or a lost connection, repeat the same `execute` with the same `idempotency_key` or read `plot.receipts.get`; a new key repeats the effect.
+- On a timeout, `OUTCOME_UNKNOWN` or a lost connection, read `error.applied` and `commits`, then `lookup` `receipts.get` or repeat the same `execute` with the same `idempotency_key`; a new key repeats the effect.
 - Conflicts. `READ_CONFLICT` or `FILE_CHANGED` on your own file: reread it with `plot.files.read` and redo the edit with a new `idempotency_key`. `EDIT_ALREADY_APPLIED`: the edit is in, send only what is missing. A conflict on a file you do not own: stop and report it. `STALE_EXECUTOR` or `LEASE_EXPIRED`: start a new `execute`.
 - Look at your screens: `plot.preview` then `plot.tasks.wait`, and read the commit `diagnostics` for compile errors. Fix defects, preview again.
 

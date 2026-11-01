@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.0 - 2026-11-02
+
+Requires server contract 2.14.0; reconnect `/mcp` after the server update. `files.read` marks a partial read with `truncated:true` and `representation:"json"` returns a whole JSON file. `objects.restore_version` with `to:"accepted"` drops a draft that does not validate, and `objects.open` returns `accepted_source` for reading the accepted files. `error.applied` says whether an unknown outcome landed. The SDK accepts common guessed input forms and clamps numeric bounds.
+
 ## 0.9.0 - 2026-11-01
 
 Requires the server with the `lookup` tool (contract 2.13.0). Reads that need no VM go through `lookup({method, input})`: finding a target, polling a receipt, help. `execute` stays for code and for `plot.sessions.open`. Reconnect `/mcp` to see the new tool.

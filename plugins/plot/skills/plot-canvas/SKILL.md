@@ -10,7 +10,7 @@ The deliverable is a coherent, inspectable result, not a run of calls. `execute`
 ## Start from intent and the canvas
 
 - Settle audience, job, content, target viewport and what "done" means; infer the rest.
-- Read before changing: `plot.objects.open`, then `plot.files.list`/`plot.files.read` and `plot.objects.read`; `plot.inspect` for geometry; `plot.comments.read` for open review threads.
+- Read before changing: `plot.objects.open`, then `plot.files.list`/`plot.files.read` (a partial read has `truncated:true` and does not parse; `representation:"json"` returns a whole JSON file) and `plot.objects.read`; `plot.inspect` for geometry; `plot.comments.read` for open review threads.
 - A coding task that touches a canvas on the side follows the same rules: the repository is read, never mirrored.
 
 ## Imagery and brand material
