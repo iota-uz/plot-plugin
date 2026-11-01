@@ -7,9 +7,10 @@
     "plot-video"
   ],
   "requiredTools": [
-    "execute"
+    "execute",
+    "lookup"
   ],
-  "contractVersion": "2.12.0",
+  "contractVersion": "2.13.0",
   "operations": [
     "analytics.import",
     "analytics.read",

@@ -10,7 +10,7 @@ Already-running sessions may retain an older cached plugin. Validate a release i
 
 ## Advisory hook
 
-`hooks/hooks.json` registers one advisory, fail-open hook owned by `scripts/design-context.mjs`: after a conversation is compacted it reminds the model that Plot exposes one tool, `execute`, and that `plot.help` returns signatures. It reads no transcript, contacts no service, invokes no model, changes no call arguments and blocks nothing. Codex requires review and trust of the current hook definition; a disabled or untrusted hook leaves everything usable.
+`hooks/hooks.json` registers one advisory, fail-open hook owned by `scripts/design-context.mjs`: after a conversation is compacted it reminds the model that `lookup` reads with no VM, `execute` runs code, and help returns signatures. It reads no transcript, contacts no service, invokes no model, changes no call arguments and blocks nothing. Codex requires review and trust of the current hook definition; a disabled or untrusted hook leaves everything usable.
 
 ## Canvas worker agent
 

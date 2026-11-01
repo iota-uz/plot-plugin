@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.0 - 2026-11-01
+
+Requires the server with the `lookup` tool (contract 2.13.0). Reads that need no VM go through `lookup({method, input})`: finding a target, polling a receipt, help. `execute` stays for code and for `plot.sessions.open`. Reconnect `/mcp` to see the new tool.
+
 ## 0.8.0 - 2026-10-31
 
 Requires server contract 2.12.0. The server exposes one tool, `execute`, running TypeScript against `plot.<namespace>.<method>`; the 54 per-feature tools are gone. The canvas and video skills, the canvas worker and the references are rewritten around it and carry judgement only; signatures come from `plot.help` and the server instructions. `contract.json` lists the registry operations, and the contract test checks every `plot.*` call the plugin names against them.

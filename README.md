@@ -12,7 +12,7 @@ The skills teach how to approach the work: for canvases, read the canvas first, 
 Claude Code also gets:
 
 - `plot:plot-canvas-worker`, a subagent for one parallel slice of canvas work. It preloads `plot-canvas`, has no Bash or file-writing tools, and expects the canvas ref, its own file paths and the library digest in its prompt. Codex has no plugin agents; the brief in `plot-canvas` plus `references/worker-rules.md` serve there.
-- A reminder after a conversation is compacted: Plot exposes one tool, `execute`, and `plot.help` returns signatures. The hook is advisory and fails open.
+- A reminder after a conversation is compacted: `lookup` reads with no VM, `execute` runs code, and help returns signatures. The hook is advisory and fails open.
 
 ## Authentication
 
@@ -58,7 +58,7 @@ claude plugin validate --strict .
 node --test plugins/plot/scripts/*.test.mjs
 ```
 
-The tests cover the hook and a contract check: `plugins/plot/contract.json` requires the one tool `execute` and lists the server registry operations, and every `plot.<namespace>.<method>` the skills, references and worker agent name must be one of them.
+The tests cover the hook and a contract check: `plugins/plot/contract.json` requires the tools `execute` and `lookup` and lists the server registry operations, and every `plot.<namespace>.<method>` the skills, references and worker agent name must be one of them.
 
 The first public release targets Claude Code and Codex CLI/Desktop. A registered ChatGPT Work app is a later phase.
 

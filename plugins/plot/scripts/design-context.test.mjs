@@ -7,12 +7,12 @@ import { fileURLToPath } from "node:url";
 const run = (input) => spawnSync(process.execPath, [fileURLToPath(new URL("./design-context.mjs", import.meta.url))], { input: typeof input === "string" ? input : JSON.stringify(input), encoding: "utf8" });
 const hooks = JSON.parse(readFileSync(fileURLToPath(new URL("../hooks/hooks.json", import.meta.url)), "utf8")).hooks;
 
-test("the compaction reminder names execute and plot.help, stays short and fires only on compaction", () => {
+test("the compaction reminder names lookup, execute and help, stays short and fires only on compaction", () => {
   const out = run({ hook_event_name: "SessionStart", source: "compact", session_id: "a" });
   assert.equal(out.status, 0);
   const text = JSON.parse(out.stdout).hookSpecificOutput.additionalContext;
   assert.ok(text.length <= 600, `${text.length} characters`);
-  for (const word of ["execute", "plot.help", "idempotency_key"]) assert.ok(text.includes(word), word);
+  for (const word of ["lookup", "execute", "idempotency_key"]) assert.ok(text.includes(word), word);
   for (const source of ["startup", "resume", "clear", undefined]) assert.equal(run({ hook_event_name: "SessionStart", source, session_id: "a" }).stdout, "");
 });
 

@@ -5,7 +5,7 @@ description: Create or revise interfaces, interactive prototypes, diagrams, repo
 
 # Plot Canvas
 
-The deliverable is a coherent, inspectable result, not a run of calls. Plot exposes one tool, `execute`, which runs TypeScript calling `plot.<namespace>.<method>(input)`. The server instructions and `plot.help` own names, signatures and limits; when they disagree with this skill, they win. Unsure of a call: `plot.help({topic})` (a namespace, a method name, `"guides"` or `"guide:<id>"`) before guessing. Task guides worth reading once: `guide:screens`, `guide:canvas-document`, `guide:libraries`, `guide:visual-loop`.
+The deliverable is a coherent, inspectable result, not a run of calls. `execute` runs TypeScript in a VM calling `plot.<namespace>.<method>(input)`. `lookup({method, input})` answers `objects.find`, `receipts.get`, `receipts.list`, `artifacts.read`, `help` and `media.capabilities` at once with no VM: use it to find a target and to poll a receipt. The server instructions and `plot.help` own names, signatures and limits; when they disagree with this skill, they win. Unsure of a call: `plot.help({topic})` (a namespace, a method name, `"guides"` or `"guide:<id>"`) before guessing. Task guides worth reading once: `guide:screens`, `guide:canvas-document`, `guide:libraries`, `guide:visual-loop`.
 
 ## Start from intent and the canvas
 

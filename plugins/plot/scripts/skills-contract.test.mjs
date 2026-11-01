@@ -12,12 +12,12 @@ const skills = contract.skills.map((name) => `skills/${name}/SKILL.md`);
 const references = readdirSync(join(root, "references")).map((name) => `references/${name}`);
 const everything = [...skills, ...agents, ...references];
 
-// The server exposes one tool, `execute`. A backticked `plot.<namespace>.<method>` must be an operation of its registry.
+// The server exposes `execute`, `bash` and `lookup`; `lookup` is what the plugin must find for reads. A backticked `plot.<namespace>.<method>` must be an operation of its registry.
 const operations = new Set(contract.operations);
 const calls = (text) => [...text.matchAll(/`plot\.([a-z]+)\.([A-Za-z]+)[`(({]/g)].map((match) => `${match[1]}.${match[2]}`);
 
-test("contract.json requires exactly the one tool the server exposes", () => {
-  assert.deepEqual(contract.requiredTools, ["execute"]);
+test("contract.json requires the tools the skills teach", () => {
+  assert.deepEqual(contract.requiredTools, ["execute", "lookup"]);
   assert.equal(new Set(contract.operations).size, contract.operations.length);
 });
 

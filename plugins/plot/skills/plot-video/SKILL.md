@@ -5,7 +5,7 @@ description: Produce or revise videos, timed scenes, character performances, voi
 
 # Plot Video
 
-Own the whole timed-media result: story, image, motion, character continuity, sound, exact render evidence, and a clear human decision point. The only Plot tool is `execute`: TypeScript in a VM calling `plot.<namespace>.<method>(input)`. Signatures and schemas live in `plot.help({topic})` and the server instructions, and they win over this skill. If unsure of a method, run `plot.help({topic:"catalog"})` or `plot.help({topic:"scene"})` first.
+Own the whole timed-media result: story, image, motion, character continuity, sound, exact render evidence, and a clear human decision point. `execute` runs TypeScript in a VM calling `plot.<namespace>.<method>(input)`. `lookup({method, input})` answers `objects.find`, `receipts.get`, `receipts.list`, `artifacts.read`, `help` and `media.capabilities` at once with no VM: use it to find a target and to poll a receipt. Signatures and schemas live in `plot.help({topic})` and the server instructions, and they win over this skill. If unsure of a method, run `plot.help({topic:"catalog"})` or `plot.help({topic:"scene"})` first.
 
 ## Model
 

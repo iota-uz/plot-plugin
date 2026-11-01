@@ -1,5 +1,5 @@
 // Fail open. No transcript, credential, network, model or subprocess access.
-const REMINDER = "If this session uses Plot: it exposes one tool, execute, running TypeScript against plot.<namespace>.<method>(input). Signatures are gone after compaction; call plot.help({topic}) (\"catalog\", a namespace or a method name) before a call you cannot write exactly. After a timeout repeat the same call with the same idempotency_key; never resubmit paid work blindly.";
+const REMINDER = "If this session uses Plot: lookup({method, input}) reads with no VM (objects.find, receipts.get, help); execute runs TypeScript against plot.<namespace>.<method>(input). Signatures are gone after compaction; call lookup({method:\"help\", input:{topic}}) (\"catalog\", a namespace or a method name) before a call you cannot write exactly. After a timeout repeat the same call with the same idempotency_key; never resubmit paid work blindly.";
 try {
   let raw = "";
   for await (const chunk of process.stdin) {
