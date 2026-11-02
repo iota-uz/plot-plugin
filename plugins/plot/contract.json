@@ -10,7 +10,7 @@
     "execute",
     "lookup"
   ],
-  "contractVersion": "2.15.0",
+  "contractVersion": "2.16.0",
   "operations": [
     "analytics.import",
     "analytics.read",
@@ -61,6 +61,7 @@
     "objects.import",
     "objects.move",
     "objects.open",
+    "objects.purge",
     "objects.read",
     "objects.restore",
     "preview",

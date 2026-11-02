@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.0 - 2026-11-02
+
+Requires server contract 2.16.0; reconnect `/mcp` after the server update. `plot.objects.purge({target, confirm, idempotency_key})` deletes an archived canvas or library for good. `confirm` repeats `target.ref` exactly, and it runs in a workspace session. Videos, characters, assets, workspaces and objects from the database migration stay archived.
+
 ## 0.11.0 - 2026-11-02
 
 Requires server contract 2.15.0; reconnect `/mcp` after the server update. `plot.releases.create` and the library `versions` facet return a `pin` to write into `/dependencies.lock.json`, and a wrong pin is refused at the write. A refusal without its own code arrives as `OPERATION_REFUSED` with `domain_code`. `plot.help` shows a signature and summary for every operation.
