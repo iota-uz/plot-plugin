@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.0 - 2026-11-02
+
+Requires server contract 2.15.0; reconnect `/mcp` after the server update. `plot.releases.create` and the library `versions` facet return a `pin` to write into `/dependencies.lock.json`, and a wrong pin is refused at the write. A refusal without its own code arrives as `OPERATION_REFUSED` with `domain_code`. `plot.help` shows a signature and summary for every operation.
+
 ## 0.10.0 - 2026-11-02
 
 Requires server contract 2.14.0; reconnect `/mcp` after the server update. `files.read` marks a partial read with `truncated:true` and `representation:"json"` returns a whole JSON file. `objects.restore_version` with `to:"accepted"` drops a draft that does not validate, and `objects.open` returns `accepted_source` for reading the accepted files. `error.applied` says whether an unknown outcome landed. The SDK accepts common guessed input forms and clamps numeric bounds.
