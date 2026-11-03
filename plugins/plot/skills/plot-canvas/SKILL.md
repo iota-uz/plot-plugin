@@ -52,4 +52,4 @@ Every write carries `expected_hash` per path, so workers on different files do n
 
 ## Handoff
 
-Give the deep link of what changed (`SourceCommit.url`, or the object's `url` plus page/node), never the bare canvas URL for one node's work, plus what changed and why, real warnings, and the next choice. No call logs.
+Give the deep link of what changed, never the bare canvas URL for one node's work, plus what changed and why, real warnings, and the next choice. No call logs. The link is `SourceCommit.url`; for any other place it is the object's `url` plus `?page=<page_id>&node=<node_id>`, e.g. `https://canvas.iota.uz/w/<workspace>/canvas/<slug>?page=onboarding&node=onb2-proof`. A `canvas://<workspace>/<slug>?page=…&node=…` ref is an agent locator that no browser opens: hand a person the https form with the same `page` and `node`, even when they gave you the `canvas://` ref.

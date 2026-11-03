@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.1 - 2026-11-03
+
+Works with server contract 2.16.0. A handoff names the https link of the changed node or page: `https://canvas.iota.uz/w/<workspace>/canvas/<slug>?page=<id>&node=<id>`. A `canvas://` ref a person pastes is an agent locator no browser opens; the agent hands back the https form with the same `page` and `node`. The compaction reminder carries the same rule.
+
 ## 0.12.0 - 2026-11-02
 
 Requires server contract 2.16.0; reconnect `/mcp` after the server update. `plot.objects.purge({target, confirm, idempotency_key})` deletes an archived canvas or library for good. `confirm` repeats `target.ref` exactly, and it runs in a workspace session. Videos, characters, assets, workspaces and objects from the database migration stay archived.
