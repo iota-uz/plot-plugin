@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.13.0 - 2026-11-16
+
+Requires server contract 2.49.0. Route task-card messages and answers through `agents.card.act`, declared in the plugin contract and confirmed by production `help` on 2026-11-16. Both skills use the card channel rather than direct T3 sends. Contract tests cover nested SDK methods, underscores, and bare `agents.card.act` references; the existing `objects.restore_version` guidance is also declared.
+
 ## 0.12.1 - 2026-11-03
 
 Works with server contract 2.16.0. A handoff names the https link of the changed node or page: `https://canvas.iota.uz/w/<workspace>/canvas/<slug>?page=<id>&node=<id>`. A `canvas://` ref a person pastes is an agent locator no browser opens; the agent hands back the https form with the same `page` and `node`. The compaction reminder carries the same rule.

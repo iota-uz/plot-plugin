@@ -10,8 +10,9 @@
     "execute",
     "lookup"
   ],
-  "contractVersion": "2.16.0",
+  "contractVersion": "2.49.0",
   "operations": [
+    "agents.card.act",
     "analytics.import",
     "analytics.read",
     "artifacts.read",
@@ -64,6 +65,7 @@
     "objects.purge",
     "objects.read",
     "objects.restore",
+    "objects.restore_version",
     "preview",
     "processes.exec",
     "processes.stdin",
