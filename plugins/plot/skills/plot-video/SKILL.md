@@ -7,6 +7,10 @@ description: Produce or revise videos, timed scenes, character performances, voi
 
 Own the whole timed-media result: story, image, motion, character continuity, sound, exact render evidence, and a clear human decision point. `execute` runs TypeScript in a VM calling `plot.<namespace>.<method>(input)`. `lookup({method, input})` answers `objects.find`, `receipts.get`, `receipts.list`, `artifacts.read`, `help` and `media.capabilities` at once with no VM: use it to find a target and to poll a receipt. Signatures and schemas live in `plot.help({topic})` and the server instructions, and they win over this skill. If unsure of a method, run `plot.help({topic:"catalog"})` or `plot.help({topic:"scene"})` first.
 
+## Task-card communication
+
+Send messages and answers to a task-card agent only through `agents.card.act`, never `t3_thread_send`. Plot owns delivery and question state. Discover the current action schema with `plot.help({topic:"agents.card.act"})`.
+
 ## Model
 
 - A project has one master (script and timeline in the master language) and one variant per other language. Structure (scenes, shots, visuals) lives once on the master; a variant overrides narration, on-screen and caption text, voice clips and timing. Retime a variant; a translation does not keep the master's rhythm.

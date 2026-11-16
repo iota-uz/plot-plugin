@@ -7,6 +7,10 @@ description: Create or revise interfaces, interactive prototypes, diagrams, repo
 
 The deliverable is a coherent, inspectable result, not a run of calls. `execute` runs TypeScript in a VM calling `plot.<namespace>.<method>(input)`. `lookup({method, input})` answers `objects.find`, `receipts.get`, `receipts.list`, `artifacts.read`, `help` and `media.capabilities` at once with no VM: use it to find a target and to poll a receipt. The server instructions and `plot.help` own names, signatures and limits; when they disagree with this skill, they win. Unsure of a call: `plot.help({topic})` (a namespace, a method name, `"guides"` or `"guide:<id>"`) before guessing. Task guides worth reading once: `guide:screens`, `guide:canvas-document`, `guide:libraries`, `guide:visual-loop`.
 
+## Task-card communication
+
+Send messages and answers to a task-card agent only through `agents.card.act`, never `t3_thread_send`. Plot owns delivery and question state. Discover the current action schema with `plot.help({topic:"agents.card.act"})`.
+
 ## Start from intent and the canvas
 
 - Settle audience, job, content, target viewport and what "done" means; infer the rest.
