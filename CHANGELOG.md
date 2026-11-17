@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.14.0 - 2026-11-17
+
+Requires server contract 2.53.0; reconnect `/mcp` after the server update. A block on a canvas is one `boundaries` entity with a computed frame: `nodes.pack` sections become blocks of `type:"section"` instead of title labels, and `boundaries.add` `{id, type:"section", label, nodeIds, parentId?}` groups screens already placed. The `groups` collection is gone. `lookup` help with a structural operation as the topic (`boundaries.add`, `nodes.pack`) returns its signature and an example.
+
 ## 0.13.0 - 2026-11-16
 
 Requires server contract 2.49.0. Route task-card messages and answers through `agents.card.act`, declared in the plugin contract and confirmed by production `help` on 2026-11-16. Both skills use the card channel rather than direct T3 sends. Contract tests cover nested SDK methods, underscores, and bare `agents.card.act` references; the existing `objects.restore_version` guidance is also declared.
