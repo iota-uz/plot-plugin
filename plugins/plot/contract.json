@@ -10,7 +10,7 @@
     "execute",
     "lookup"
   ],
-  "contractVersion": "2.49.0",
+  "contractVersion": "2.53.0",
   "operations": [
     "agents.card.act",
     "analytics.import",
