@@ -12,16 +12,27 @@ const skills = contract.skills.map((name) => `skills/${name}/SKILL.md`);
 const references = readdirSync(join(root, "references")).map((name) => `references/${name}`);
 const everything = [...skills, ...agents, ...references];
 
-// The server exposes `execute`, `bash` and `lookup`; `lookup` is what the plugin must find for reads. A backticked `plot.<namespace>.<method>` must be an operation of its registry.
+// Validate nested SDK methods and the bare task-card operation used in routing prose.
 const operations = new Set(contract.operations);
-const calls = (text) => [...text.matchAll(/`plot\.([a-z]+)\.([A-Za-z]+)[`(({]/g)].map((match) => `${match[1]}.${match[2]}`);
+const calls = (text) => [
+  ...[...text.matchAll(/`plot\.([a-z][A-Za-z_]*(?:\.[a-z][A-Za-z_]*)*)[`(({]/g)].map((match) => match[1]),
+  ...[...text.matchAll(/(?<![\w.])agents\.card\.act\b/g)].map(() => "agents.card.act"),
+];
+
+test("operation references include nested SDK calls and bare card routing guidance", () => {
+  for (const reference of ["`agents.card.act`", "agents.card.act", "`plot.agents.card.act`", "`plot.agents.card.act({})`"]) {
+    assert.deepEqual(calls(reference), ["agents.card.act"], reference);
+    const withoutCardAction = new Set([...operations].filter((name) => name !== "agents.card.act"));
+    assert.deepEqual(calls(reference).filter((name) => !withoutCardAction.has(name)), ["agents.card.act"]);
+  }
+});
 
 test("contract.json requires the tools the skills teach", () => {
   assert.deepEqual(contract.requiredTools, ["execute", "lookup"]);
   assert.equal(new Set(contract.operations).size, contract.operations.length);
 });
 
-test("every plot.<namespace>.<method> the skills, references and the worker name is a registry operation", () => {
+test("every SDK or card-routing operation named by the plugin is declared", () => {
   for (const file of everything) {
     const unknown = calls(read(file)).filter((name) => !operations.has(name));
     assert.deepEqual(unknown, [], file);
