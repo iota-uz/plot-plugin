@@ -33,6 +33,7 @@ For a place, product or brand, real photography or supplied work is core content
 
 ## Verify with evidence
 
+- **Design measurements first.** A preview's `plot.tasks.wait` answer carries `DESIGN_MEASUREMENTS` when checks failed. Requirements in it: read them (`facets:["result"]` → `layout.measurements[].findings`), fix or justify each before done; advisories are yours to weigh.
 - After a meaningful change, `plot.preview({source})` then `plot.tasks.wait({tasks})`; images come back as native media. `plot.compare` diffs two revisions, `plot.inspect` measures without rendering. Read the full compile with `plot.objects.read` facet `build`.
 - Judge hierarchy, balance, image fit, rhythm, contrast. Measurements are evidence to check, not verdicts: a horizontal scroller can be intentional. Name the defect and the fix, correct it, preview again. If the remaining choice is subjective, show the strongest direction and name the alternative.
 - `plot.comments.write` answers a review thread; `plot.comments.transition` changes its state only when the user's role allows it. Name a revision worth returning to with `plot.objects.checkpoint`.

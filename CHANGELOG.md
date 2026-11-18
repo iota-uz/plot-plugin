@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.14.1 - 2026-11-18
+
+Requires server contract 2.53.0. `plot-canvas` starts "Verify with evidence" with design measurements: a canvas page, node or screen preview reports `DESIGN_MEASUREMENTS` in its task read; requirement findings are fixed or justified before the work is called done, advisory ones are weighed (iota-uz/plot#547).
+
 ## 0.14.0 - 2026-11-17
 
 Requires server contract 2.53.0; reconnect `/mcp` after the server update. A block on a canvas is one `boundaries` entity with a computed frame: `nodes.pack` sections become blocks of `type:"section"` instead of title labels, and `boundaries.add` `{id, type:"section", label, nodeIds, parentId?}` groups screens already placed. The `groups` collection is gone. `lookup` help with a structural operation as the topic (`boundaries.add`, `nodes.pack`) returns its signature and an example.
